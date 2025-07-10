@@ -1,6 +1,6 @@
 -- 🔷 Key & UserId
-local validKey = "Premium_VsnGGSECRETKEY"
-local allowedUserId = 8309815866
+local validKey = "Premium_jde8q7263dfhury3tr7"
+local allowedUserId = 8309797161
 local issuedDate = "2025-07-10"
 
 -- 🔷 Fungsi konversi tanggal ke timestamp
@@ -15,23 +15,6 @@ local now = os.time()
 local expireAfter = 30 * 24 * 60 * 60
 if now > (issuedTimestamp + expireAfter) then
 	game.Players.LocalPlayer:Kick("❌ Key expired. Please get a new key.")
-	return
-end
-
--- 🔷 Auto-load Key kalau sudah disimpan
-local hasKey
-pcall(function()
-	if isfile("MyKey.txt") then
-		local savedKey = readfile("MyKey.txt")
-		if savedKey == validKey and game.Players.LocalPlayer.UserId == allowedUserId then
-			hasKey = true
-		end
-	end
-end)
-
-if hasKey then
-	-- 🔷 Load script langsung
-	loadstring(game:HttpGet('https://pastefy.app/pNYqnGYk/raw'))()
 	return
 end
 
@@ -78,7 +61,7 @@ local textbox = Instance.new("TextBox", frame)
 textbox.Size = UDim2.new(0.8, 0, 0, 30)
 textbox.Position = UDim2.new(0.1, 0, 0.4, 0)
 textbox.PlaceholderText = "Type your key..."
-textbox.Text = ""
+textbox.Text = validKey -- 🔷 otomatis isi key di sini
 textbox.TextColor3 = Color3.new(0,0,0)
 textbox.Font = Enum.Font.SourceSans
 textbox.TextSize = 18
@@ -108,13 +91,19 @@ button.MouseButton1Click:Connect(function()
 		if player.UserId == allowedUserId then
 			result.TextColor3 = Color3.new(0,1,0)
 			result.Text = "✅ Key accepted! Saving..."
+
+			-- 🔷 Save key locally
 			pcall(function()
 				writefile("MyKey.txt", validKey)
 			end)
+
 			wait(1)
 			screenGui:Destroy()
 
+			-- 🔷 Load script dari link
 			loadstring(game:HttpGet('https://pastefy.app/pNYqnGYk/raw'))()
+			loadstring(game:HttpGet('https://pastefy.app/fA2w9kZx/raw'))()
+
 		else
 			result.TextColor3 = Color3.new(1,0,0)
 			result.Text = "❌ This key is not registered for your account."
