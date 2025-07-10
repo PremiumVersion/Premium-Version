@@ -1,5 +1,5 @@
 -- 🔷 Game check
-local allowedPlaceId = 1234567890 -- GANTI dengan PlaceId game kamu
+local allowedPlaceId = 126244816328678 -- GANTI dengan PlaceId game kamu
 
 if game.PlaceId ~= allowedPlaceId then
 	game.Players.LocalPlayer:Kick("❌ Script only works in the allowed game.")
@@ -8,8 +8,8 @@ end
 
 -- 🔷 Key & UserId
 local validKey = "Premium_VsnGGSECRETKEY"
-local allowedUserId = 8309797161 -- ganti dengan UserId Roblox kamu
-local issuedDate = "2025-07-10" -- tanggal key diterbitkan (YYYY-MM-DD)
+local allowedUserId = 8309815866
+local issuedDate = "2025-07-10"
 
 -- 🔷 Fungsi konversi tanggal ke timestamp
 local function parseDate(str)
@@ -20,9 +20,26 @@ end
 -- 🔷 Cek expired
 local issuedTimestamp = parseDate(issuedDate)
 local now = os.time()
-local expireAfter = 30 * 24 * 60 * 60 -- 30 hari dalam detik
+local expireAfter = 30 * 24 * 60 * 60
 if now > (issuedTimestamp + expireAfter) then
 	game.Players.LocalPlayer:Kick("❌ Key expired. Please get a new key.")
+	return
+end
+
+-- 🔷 Auto-load Key kalau sudah disimpan
+local hasKey
+pcall(function()
+	if isfile("MyKey.txt") then
+		local savedKey = readfile("MyKey.txt")
+		if savedKey == validKey and game.Players.LocalPlayer.UserId == allowedUserId then
+			hasKey = true
+		end
+	end
+end)
+
+if hasKey then
+	-- 🔷 Load script langsung
+	loadstring(game:HttpGet('https://pastefy.app/pNYqnGYk/raw'))()
 	return
 end
 
@@ -44,12 +61,26 @@ frame.Position = UDim2.new(0.5, -150, 0.5, -75)
 frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 
 local title = Instance.new("TextLabel", frame)
-title.Size = UDim2.new(1, 0, 0, 30)
+title.Size = UDim2.new(1, -30, 0, 30)
 title.Text = "Enter Key"
 title.TextColor3 = Color3.new(1,1,1)
 title.BackgroundTransparency = 1
 title.Font = Enum.Font.SourceSansBold
 title.TextSize = 20
+title.Position = UDim2.new(0, 0, 0, 0)
+
+local close = Instance.new("TextButton", frame)
+close.Size = UDim2.new(0, 30, 0, 30)
+close.Position = UDim2.new(1, -30, 0, 0)
+close.Text = "❌"
+close.TextColor3 = Color3.new(1,0,0)
+close.Font = Enum.Font.SourceSansBold
+close.TextSize = 20
+close.BackgroundTransparency = 1
+
+close.MouseButton1Click:Connect(function()
+	screenGui:Destroy()
+end)
 
 local textbox = Instance.new("TextBox", frame)
 textbox.Size = UDim2.new(0.8, 0, 0, 30)
@@ -84,11 +115,13 @@ button.MouseButton1Click:Connect(function()
 	if textbox.Text == validKey then
 		if player.UserId == allowedUserId then
 			result.TextColor3 = Color3.new(0,1,0)
-			result.Text = "✅ Key accepted! Loading script..."
+			result.Text = "✅ Key accepted! Saving..."
+			pcall(function()
+				writefile("MyKey.txt", validKey)
+			end)
 			wait(1)
 			screenGui:Destroy()
 
-			-- 🔷 Load script dari link
 			loadstring(game:HttpGet('https://pastefy.app/pNYqnGYk/raw'))()
 		else
 			result.TextColor3 = Color3.new(1,0,0)
