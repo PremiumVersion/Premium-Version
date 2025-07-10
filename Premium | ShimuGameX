@@ -29,12 +29,6 @@ pcall(function()
 	end
 end)
 
-if hasKey then
-	-- 🔷 Load script langsung
-	loadstring(game:HttpGet('https://pastefy.app/pNYqnGYk/raw'))()
-	return
-end
-
 -- 🔷 GUI Key Check
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
@@ -78,7 +72,7 @@ local textbox = Instance.new("TextBox", frame)
 textbox.Size = UDim2.new(0.8, 0, 0, 30)
 textbox.Position = UDim2.new(0.1, 0, 0.4, 0)
 textbox.PlaceholderText = "Type your key..."
-textbox.Text = ""
+textbox.Text = validKey -- 🔷 otomatis terisi
 textbox.TextColor3 = Color3.new(0,0,0)
 textbox.Font = Enum.Font.SourceSans
 textbox.TextSize = 18
