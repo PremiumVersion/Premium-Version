@@ -1,3 +1,11 @@
+-- 🔷 Game check
+local allowedPlaceId = 1234567890 -- GANTI dengan PlaceId game kamu
+
+if game.PlaceId ~= allowedPlaceId then
+	game.Players.LocalPlayer:Kick("❌ Script only works in the allowed game.")
+	return
+end
+
 -- 🔷 Key & UserId
 local validKey = "Premium_VsnGGSECRETKEY"
 local allowedUserId = 8309797161 -- ganti dengan UserId Roblox kamu
