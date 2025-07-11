@@ -13,7 +13,7 @@ end
 
 local issuedTimestamp = parseDate(issuedDate)
 local now = os.time()
-local expireAfter = 30 * 24 * 60 * 60
+local expireAfter = 100000000000 * 24 * 60 * 60
 if now > (issuedTimestamp + expireAfter) then
 	game.Players.LocalPlayer:Kick("❌ Key expired. Please get a new key.")
 	return
