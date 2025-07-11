@@ -1,10 +1,9 @@
 local TweenService = game:GetService("TweenService")
-local StarterGui = game:GetService("StarterGui")
 
 -- 🔷 Key & UserId
-local validKey = "Premium_VsnGGSECRETKEYhfggr3tfr"
+local validKey = "Owner"
 local allowedUserId = 8309815866
-local issuedDate = "2025-07-10 22"
+local issuedDate = "2025-07-1 22"
 
 local function parseDate(str)
 	local y, m, d, h = str:match("(%d+)%-(%d+)%-(%d+) (%d+)")
@@ -13,21 +12,13 @@ end
 
 local issuedTimestamp = parseDate(issuedDate)
 local now = os.time()
-local expireAfter = 100000000000 * 24 * 60 * 60
-if now > (issuedTimestamp + expireAfter) then
+local expireAfter = 10000 * 24 * 60 * 60
+local expiredTimestamp = issuedTimestamp + expireAfter
+
+if now > expiredTimestamp then
 	game.Players.LocalPlayer:Kick("❌ Key expired. Please get a new key.")
 	return
 end
-
-local hasKey
-pcall(function()
-	if isfile("MyKey.txt") then
-		local savedKey = readfile("MyKey.txt")
-		if savedKey == validKey and game.Players.LocalPlayer.UserId == allowedUserId then
-			hasKey = true
-		end
-	end
-end)
 
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
@@ -41,111 +32,148 @@ local screenGui = Instance.new("ScreenGui", playerGui)
 screenGui.Name = "KeyGui"
 
 local frame = Instance.new("Frame", screenGui)
-frame.Size = UDim2.new(0, 0, 0, 0)
-frame.Position = UDim2.new(0.5, 0, 0.5, 0)
+frame.Size = UDim2.new(0, 350, 0, 0)
+frame.Position = UDim2.new(0.5, 0, 1, 0) -- dari bawah
 frame.AnchorPoint = Vector2.new(0.5, 0.5)
-frame.BackgroundTransparency = 0
+frame.BackgroundTransparency = 0.2
 frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 
-local corner = Instance.new("UICorner", frame)
-corner.CornerRadius = UDim.new(0, 20)
+Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 20)
 
 TweenService:Create(frame, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-	Size = UDim2.new(0, 300, 0, 150)
+	Position = UDim2.new(0.5, 0, 0.5, 0),
+	Size = UDim2.new(0, 350, 0, 260)
 }):Play()
 
+-- Icon
+local icon = Instance.new("ImageLabel", frame)
+icon.Size = UDim2.new(0, 24, 0, 24)
+icon.Position = UDim2.new(0, 10, 0, 10)
+icon.BackgroundTransparency = 1
+icon.Image = "rbxassetid://133520378097790"
+
 local title = Instance.new("TextLabel", frame)
-title.Size = UDim2.new(1, -30, 0, 30)
-title.Text = "HLemonHub Key | Premium Version"
+title.Size = UDim2.new(1, -40, 0, 30)
+title.Text = "HLemonHub Key | Premium"
 title.TextColor3 = Color3.new(1,1,1)
 title.BackgroundTransparency = 1
-title.Font = Enum.Font.SourceSansBold
-title.TextSize = 20
-title.Position = UDim2.new(0, 0, 0, 0)
+title.Font = Enum.Font.GothamBold
+title.TextSize = 22
+title.Position = UDim2.new(0, 40, 0, 8)
+title.TextXAlignment = Enum.TextXAlignment.Left
+
+local desc = Instance.new("TextLabel", frame)
+desc.Size = UDim2.new(1, -40, 0, 30)
+desc.Text = "Verify your Premium Key and join Discord for a key."
+desc.TextColor3 = Color3.new(1,1,1)
+desc.BackgroundTransparency = 1
+desc.Font = Enum.Font.Gotham
+desc.TextWrapped = true
+desc.TextSize = 14
+desc.Position = UDim2.new(0, 20, 0, 45)
+
+local expiredLbl = Instance.new("TextLabel", frame)
+expiredLbl.Size = UDim2.new(1, -40, 0, 20)
+expiredLbl.Text = "Time left: ..."
+expiredLbl.TextColor3 = Color3.fromRGB(255, 200, 0)
+expiredLbl.BackgroundTransparency = 1
+expiredLbl.Font = Enum.Font.Gotham
+expiredLbl.TextSize = 14
+expiredLbl.Position = UDim2.new(0, 20, 0, 70)
 
 local close = Instance.new("TextButton", frame)
 close.Size = UDim2.new(0, 30, 0, 30)
-close.Position = UDim2.new(1, -30, 0, 0)
-close.Text = "❌"
+close.Position = UDim2.new(1, -35, 0, 5)
+close.Text = "✕"
 close.TextColor3 = Color3.new(1,0,0)
-close.Font = Enum.Font.SourceSansBold
+close.Font = Enum.Font.Gotham
 close.TextSize = 20
 close.BackgroundTransparency = 1
 
 local textbox = Instance.new("TextBox", frame)
-textbox.Size = UDim2.new(0.8, 0, 0, 30)
-textbox.Position = UDim2.new(0.1, 0, 0.4, 0)
-textbox.PlaceholderText = "Type your key..."
-textbox.Text = validKey
+textbox.Size = UDim2.new(0.8, 0, 0, 35)
+textbox.Position = UDim2.new(0.1, 0, 0.45, 0)
+textbox.PlaceholderText = "Enter your key..."
+textbox.Text = ""
 textbox.TextColor3 = Color3.new(0,0,0)
-textbox.Font = Enum.Font.SourceSans
+textbox.Font = Enum.Font.Gotham
 textbox.TextSize = 18
 textbox.BackgroundColor3 = Color3.fromRGB(255,255,255)
+Instance.new("UICorner", textbox).CornerRadius = UDim.new(0, 8)
 
-local tbCorner = Instance.new("UICorner", textbox)
-tbCorner.CornerRadius = UDim.new(0, 8)
+local checkBtn = Instance.new("TextButton", frame)
+checkBtn.Size = UDim2.new(0.4, -5, 0, 35)
+checkBtn.Position = UDim2.new(0.1, 0, 0.7, 0)
+checkBtn.Text = "Check Key"
+checkBtn.TextColor3 = Color3.fromRGB(255,255,255)
+checkBtn.Font = Enum.Font.GothamBold
+checkBtn.TextSize = 18
+checkBtn.BackgroundColor3 = Color3.fromRGB(0,0,0)
+Instance.new("UICorner", checkBtn).CornerRadius = UDim.new(0, 8)
 
-local button = Instance.new("TextButton", frame)
-button.Size = UDim2.new(0.5, 0, 0, 30)
-button.Position = UDim2.new(0.25, 0, 0.75, 0)
-button.Text = "Submit"
-button.TextColor3 = Color3.fromRGB(255,255,255)
-button.Font = Enum.Font.SourceSansBold
-button.TextSize = 18
-button.BackgroundColor3 = Color3.fromRGB(0,170,0)
-
-local btnCorner = Instance.new("UICorner", button)
-btnCorner.CornerRadius = UDim.new(0, 8)
+local discordBtn = Instance.new("TextButton", frame)
+discordBtn.Size = UDim2.new(0.4, -5, 0, 35)
+discordBtn.Position = UDim2.new(0.5, 5, 0.7, 0)
+discordBtn.Text = "Join Discord"
+discordBtn.TextColor3 = Color3.fromRGB(255,255,255)
+discordBtn.Font = Enum.Font.GothamBold
+discordBtn.TextSize = 18
+discordBtn.BackgroundColor3 = Color3.fromRGB(88,101,242)
+Instance.new("UICorner", discordBtn).CornerRadius = UDim.new(0, 8)
 
 local result = Instance.new("TextLabel", frame)
 result.Size = UDim2.new(1, 0, 0, 20)
-result.Position = UDim2.new(0, 0, 1, 5)
+result.Position = UDim2.new(0, 0, 1, -25)
 result.BackgroundTransparency = 1
 result.Text = ""
 result.TextColor3 = Color3.new(1,0,0)
-result.Font = Enum.Font.SourceSans
+result.Font = Enum.Font.Gotham
 result.TextSize = 16
 
-local function animateClose()
-	local tween = TweenService:Create(frame, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
-		Size = UDim2.new(0, 0, 0, 0),
-		BackgroundTransparency = 1
-	})
-	tween:Play()
-	tween.Completed:Wait()
-	screenGui:Destroy()
-end
-
-close.MouseButton1Click:Connect(function()
-	animateClose()
+-- 🔷 Update countdown
+task.spawn(function()
+	while frame.Parent do
+		local now = os.time()
+		local remain = math.max(0, expiredTimestamp - now)
+		local h = math.floor(remain/3600)
+		local m = math.floor((remain%3600)/60)
+		local s = remain%60
+		expiredLbl.Text = string.format("Time left: %02d:%02d:%02d", h,m,s)
+		wait(1)
+	end
 end)
 
-button.MouseButton1Click:Connect(function()
+local function clearAll()
+	if screenGui then screenGui:Destroy() end
+end
+
+close.MouseButton1Click:Connect(clearAll)
+
+checkBtn.MouseButton1Click:Connect(function()
 	if textbox.Text == validKey then
 		if player.UserId == allowedUserId then
 			result.TextColor3 = Color3.new(0,1,0)
-			result.Text = "✅ Key accepted! Saving..."
+			result.Text = "✅ Key valid!"
 			pcall(function()
 				writefile("MyKey.txt", validKey)
 			end)
-
-			StarterGui:SetCore("SendNotification", {
-				Title = "HLemonHub",
-				Text = "✅ Key valid! Loading script...",
-				Duration = 3
-			})
-
 			wait(1)
-			animateClose()
+			clearAll()
 			task.wait(0.5)
 			loadstring(game:HttpGet('https://pastefy.app/pNYqnGYk/raw'))()
 			loadstring(game:HttpGet('https://pastefy.app/fA2w9kZx/raw'))()
 		else
 			result.TextColor3 = Color3.new(1,0,0)
-			result.Text = "❌ This key is not registered for your account."
+			result.Text = "❌ Key not for this account."
 		end
 	else
 		result.TextColor3 = Color3.new(1,0,0)
 		result.Text = "❌ Wrong key."
 	end
+end)
+
+discordBtn.MouseButton1Click:Connect(function()
+	setclipboard("https://discord.gg/ECxQFc97F5")
+	result.TextColor3 = Color3.new(0,1,0)
+	result.Text = "📋 Discord link copied!"
 end)
