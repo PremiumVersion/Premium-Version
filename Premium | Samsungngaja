@@ -2,7 +2,11 @@ local TweenService = game:GetService("TweenService")
 
 -- 🔷 Key & UserId
 local validKey = "han"
-local allowedUserId = 5464154339
+local allowedUserIds = {
+    5464154339,
+    8309797161,
+    8309815866
+}
 local issuedDate = "2025-07-1 22"
 
 local function parseDate(str)
