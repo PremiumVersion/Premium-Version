@@ -1,7 +1,7 @@
 local TweenService = game:GetService("TweenService")
 
 -- 🔷 Key & UserId
-local validKey = "Owner"
+local validKey = "han"
 local allowedUserId = 5464154339
 local issuedDate = "2025-07-1 22"
 
