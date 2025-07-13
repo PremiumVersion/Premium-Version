@@ -1,9 +1,15 @@
 local TweenService = game:GetService("TweenService")
 
--- 🔷 Key & UserId
+-- 🔷 Key & UserIds
 local validKey = "han"
-local allowedUserId = 5464154339
-local issuedDate = "2025-07-1 22"
+local allowedUserIds = {
+    5464154339,
+    1234567890,
+    9876543210,
+    1122334455,
+    5566778899
+}
+local issuedDate = "2025-07-11 22"
 
 local function parseDate(str)
 	local y, m, d, h = str:match("(%d+)%-(%d+)%-(%d+) (%d+)")
@@ -12,7 +18,7 @@ end
 
 local issuedTimestamp = parseDate(issuedDate)
 local now = os.time()
-local expireAfter = 10000 * 24 * 60 * 60
+local expireAfter = 5 * 24 * 60 * 60
 local expiredTimestamp = issuedTimestamp + expireAfter
 
 if now > expiredTimestamp then
@@ -151,7 +157,14 @@ close.MouseButton1Click:Connect(clearAll)
 
 checkBtn.MouseButton1Click:Connect(function()
 	if textbox.Text == validKey then
-		if player.UserId == allowedUserId then
+		local isAllowed = false
+		for _, id in ipairs(allowedUserIds) do
+			if player.UserId == id then
+				isAllowed = true
+				break
+			end
+		end
+		if isAllowed then
 			result.TextColor3 = Color3.new(0,1,0)
 			result.Text = "✅ Key valid!"
 			pcall(function()
