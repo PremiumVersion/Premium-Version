@@ -12,7 +12,7 @@ end
 
 local issuedTimestamp = parseDate(issuedDate)
 local now = os.time()
-local expireAfter = 5 * 24 * 60 * 60
+local expireAfter = 30 * 24 * 60 * 60
 local expiredTimestamp = issuedTimestamp + expireAfter
 
 if now > expiredTimestamp then
@@ -160,7 +160,7 @@ checkBtn.MouseButton1Click:Connect(function()
 			wait(1)
 			clearAll()
 			task.wait(0.5)
-			loadstring(game:HttpGet('https://raw.githubusercontent.com/Hansvr134/HLemon.Hub/refs/heads/main/HLemon%20Hub%20Premium'))()
+			loadstring(game:HttpGet("https://raw.githubusercontent.com/Gato290/Script/refs/heads/main/HlemonHubv1"))()
 		else
 			result.TextColor3 = Color3.new(1,0,0)
 			result.Text = "❌ Key not for this account."
