@@ -141,7 +141,7 @@ checkBtn.MouseButton1Click:Connect(function()
 			wait(1)
 			clearAll()
 			task.wait(0.5)
-				loadstring(game:HttpGet("https://raw.githubusercontent.com/Gato290/Script/refs/heads/main/HlemonHubv1"))()
+				loadstring(game:HttpGet("https://raw.githubusercontent.com/PremiumVersion/Premium-Version/refs/heads/main/PREMIUM%20V1"))()
 		else
 			result.TextColor3 = Color3.new(1,0,0)
 			result.Text = "❌ Key not for this account."
