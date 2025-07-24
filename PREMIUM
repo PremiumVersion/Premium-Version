@@ -50,11 +50,11 @@ local icon = Instance.new("ImageLabel", frame)
 icon.Size = UDim2.new(0, 24, 0, 24)
 icon.Position = UDim2.new(0, 10, 0, 10)
 icon.BackgroundTransparency = 1
-icon.Image = "rbxassetid://133520378097790"
+icon.Image = "rbxassetid://105634643886181"
 
 local title = Instance.new("TextLabel", frame)
 title.Size = UDim2.new(1, -40, 0, 30)
-title.Text = "HLemonHub Key | Premium"
+title.Text = "HDragonsHub Key | Premium"
 title.TextColor3 = Color3.new(1,1,1)
 title.BackgroundTransparency = 1
 title.Font = Enum.Font.GothamBold
