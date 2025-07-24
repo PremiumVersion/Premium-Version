@@ -33,7 +33,7 @@ screenGui.Name = "KeyGui"
 
 local frame = Instance.new("Frame", screenGui)
 frame.Size = UDim2.new(0, 350, 0, 0)
-frame.Position = UDim2.new(0.5, 0, 1, 0) -- dari bawah
+frame.Position = UDim2.new(0.5, 0, 1, 0)
 frame.AnchorPoint = Vector2.new(0.5, 0.5)
 frame.BackgroundTransparency = 0.2
 frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
@@ -72,14 +72,8 @@ desc.TextWrapped = true
 desc.TextSize = 14
 desc.Position = UDim2.new(0, 20, 0, 45)
 
-local expiredLbl = Instance.new("TextLabel", frame)
-expiredLbl.Size = UDim2.new(1, -40, 0, 20)
-expiredLbl.Text = "Time left: ..."
-expiredLbl.TextColor3 = Color3.fromRGB(255, 200, 0)
-expiredLbl.BackgroundTransparency = 1
-expiredLbl.Font = Enum.Font.Gotham
-expiredLbl.TextSize = 14
-expiredLbl.Position = UDim2.new(0, 20, 0, 70)
+-- ❌ Bagian ini dihapus karena tidak diperlukan lagi:
+-- expiredLbl dan update countdown loop
 
 local close = Instance.new("TextButton", frame)
 close.Size = UDim2.new(0, 30, 0, 30)
@@ -130,19 +124,6 @@ result.TextColor3 = Color3.new(1,0,0)
 result.Font = Enum.Font.Gotham
 result.TextSize = 16
 
--- 🔷 Update countdown
-task.spawn(function()
-	while frame.Parent do
-		local now = os.time()
-		local remain = math.max(0, expiredTimestamp - now)
-		local h = math.floor(remain/3600)
-		local m = math.floor((remain%3600)/60)
-		local s = remain%60
-		expiredLbl.Text = string.format("Time left: %02d:%02d:%02d", h,m,s)
-		wait(1)
-	end
-end)
-
 local function clearAll()
 	if screenGui then screenGui:Destroy() end
 end
@@ -160,7 +141,7 @@ checkBtn.MouseButton1Click:Connect(function()
 			wait(1)
 			clearAll()
 			task.wait(0.5)
-			loadstring(game:HttpGet("https://raw.githubusercontent.com/Gato290/Script/refs/heads/main/HlemonHubv1"))()
+				loadstring(game:HttpGet("https://raw.githubusercontent.com/Gato290/Script/refs/heads/main/HlemonHubv1"))()
 		else
 			result.TextColor3 = Color3.new(1,0,0)
 			result.Text = "❌ Key not for this account."
