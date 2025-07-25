@@ -1,8 +1,18 @@
 local TweenService = game:GetService("TweenService")
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
 
--- 🔷 Key & UserId
-local validKey = "Premium_ehfverebfgwweyufveg"
+-- ✅ Hanya user ID ini yang diizinkan
 local allowedUserId = 5464154339
+
+-- ❌ Kick jika bukan user yang diizinkan
+if player.UserId ~= allowedUserId then
+    player:Kick("You are not authorized to use this script. If you want to use this script, you must buy premium lol | https://discord.gg/ECxQFc97F5")
+    return
+end
+
+-- 🔐 Key & tanggal aktif
+local validKey = "Premium_ehfverebfgwweyufveg"
 local issuedDate = "2025-07-26 18"
 
 local function parseDate(str)
@@ -16,12 +26,11 @@ local expireAfter = 30 * 24 * 60 * 60
 local expiredTimestamp = issuedTimestamp + expireAfter
 
 if now > expiredTimestamp then
-	game.Players.LocalPlayer:Kick("❌ Key expired. Please get a new key.")
+	player:Kick("❌ Key expired. Please get a new key.")
 	return
 end
 
-local Players = game:GetService("Players")
-local player = Players.LocalPlayer
+-- ✅ GUI Creation
 local playerGui = player:WaitForChild("PlayerGui")
 
 if playerGui:FindFirstChild("KeyGui") then
@@ -37,7 +46,6 @@ frame.Position = UDim2.new(0.5, 0, 1, 0)
 frame.AnchorPoint = Vector2.new(0.5, 0.5)
 frame.BackgroundTransparency = 0.2
 frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-
 Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 20)
 
 TweenService:Create(frame, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
@@ -71,9 +79,6 @@ desc.Font = Enum.Font.Gotham
 desc.TextWrapped = true
 desc.TextSize = 14
 desc.Position = UDim2.new(0, 20, 0, 45)
-
--- ❌ Bagian ini dihapus karena tidak diperlukan lagi:
--- expiredLbl dan update countdown loop
 
 local close = Instance.new("TextButton", frame)
 close.Size = UDim2.new(0, 30, 0, 30)
@@ -141,7 +146,7 @@ checkBtn.MouseButton1Click:Connect(function()
 			wait(1)
 			clearAll()
 			task.wait(0.5)
-				loadstring(game:HttpGet("https://raw.githubusercontent.com/PremiumVersion/Premium-Version/refs/heads/main/PREMIUM%20V1"))()
+			loadstring(game:HttpGet("https://raw.githubusercontent.com/PremiumVersion/Premium-Version/refs/heads/main/PREMIUM%20V1"))()
 		else
 			result.TextColor3 = Color3.new(1,0,0)
 			result.Text = "❌ Key not for this account."
