@@ -2,12 +2,11 @@ local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
--- ✅ Hanya user ID ini yang diizinkan
+-- ✅ User ID yang diizinkan
 local allowedUserId = 5464154339
 
--- ❌ Kick jika bukan user yang diizinkan
+-- ❌ Jika bukan user yang diizinkan, hentikan script (tidak kick, hanya tidak menampilkan GUI)
 if player.UserId ~= allowedUserId then
-    player:Kick("You are not authorized to use this script. If you want to use this script, you must buy premium lol | https://discord.gg/ECxQFc97F5")
     return
 end
 
