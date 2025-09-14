@@ -2,39 +2,38 @@ local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
--- ✅ User ID yang diizinkan
-local allowedUserId = 5464154339
+-- CONFIG: UserId -> {key, issuedDate}
+local validUsers = {
+	[] = {key = "", issuedDate = "2025-10-12 18"}, -- no
+	[] = {key = "", issuedDate = "2025-10-01 12"}, -- no
+	[] = {key = "", issuedDate = "2025-08-10 09"}, -- no
+	[] = {key = "", issuedDate = "2025-10-12 18"}, -- no
+	[] = {key = "", issuedDate = "2025-10-01 12"}, -- no
+	[] = {key = "", issuedDate = "2025-08-10 09"}, -- no
+	[] = {key = "", issuedDate = "2025-10-12 18"}, -- no
+	[] = {key = "", issuedDate = "2025-10-01 12"}, -- no
+	[] = {key = "", issuedDate = "2025-08-10 09"}, -- no
+}
 
--- ❌ Jika bukan user yang diizinkan, hentikan script (tidak kick, hanya tidak menampilkan GUI)
-if player.UserId ~= allowedUserId then
-    return
-end
+local expireAfter = 30 * 24 * 60 * 60 -- 30 hari
 
--- 🔐 Key & tanggal aktif
-local validKey = "Premium_ehfverebfgwweyufveg"
-local issuedDate = "2025-07-26 18"
-
+-- Helper: Parse date
 local function parseDate(str)
 	local y, m, d, h = str:match("(%d+)%-(%d+)%-(%d+) (%d+)")
-	return os.time({year = tonumber(y), month = tonumber(m), day = tonumber(d), hour = tonumber(h)})
+	return os.time({year=tonumber(y), month=tonumber(m), day=tonumber(d), hour=tonumber(h)})
 end
 
-local issuedTimestamp = parseDate(issuedDate)
-local now = os.time()
-local expireAfter = 30 * 24 * 60 * 60
+-- Check if player is allowed
+local userData = validUsers[player.UserId]
+if not userData then return end
+
+local issuedTimestamp = parseDate(userData.issuedDate)
 local expiredTimestamp = issuedTimestamp + expireAfter
+local now = os.time()
 
-if now > expiredTimestamp then
-	player:Kick("❌ Key expired. Please get a new key.")
-	return
-end
-
--- ✅ GUI Creation
+-- GUI Key System
 local playerGui = player:WaitForChild("PlayerGui")
-
-if playerGui:FindFirstChild("KeyGui") then
-	playerGui.KeyGui:Destroy()
-end
+if playerGui:FindFirstChild("KeyGui") then playerGui.KeyGui:Destroy() end
 
 local screenGui = Instance.new("ScreenGui", playerGui)
 screenGui.Name = "KeyGui"
@@ -42,332 +41,127 @@ screenGui.Name = "KeyGui"
 local frame = Instance.new("Frame", screenGui)
 frame.Size = UDim2.new(0, 350, 0, 0)
 frame.Position = UDim2.new(0.5, 0, 1, 0)
-frame.AnchorPoint = Vector2.new(0.5, 0.5)
+frame.AnchorPoint = Vector2.new(0.5,0.5)
+frame.BackgroundColor3 = Color3.fromRGB(30,30,30)
 frame.BackgroundTransparency = 0.2
-frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 20)
+Instance.new("UICorner", frame).CornerRadius = UDim.new(0,20)
 
 TweenService:Create(frame, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-	Position = UDim2.new(0.5, 0, 0.5, 0),
-	Size = UDim2.new(0, 350, 0, 260)
+	Position = UDim2.new(0.5,0,0.5,0),
+	Size = UDim2.new(0,350,0,230)
 }):Play()
 
--- Icon
-local icon = Instance.new("ImageLabel", frame)
-icon.Size = UDim2.new(0, 24, 0, 24)
-icon.Position = UDim2.new(0, 10, 0, 10)
-icon.BackgroundTransparency = 1
-icon.Image = "rbxassetid://105634643886181"
-
+-- Title
 local title = Instance.new("TextLabel", frame)
-title.Size = UDim2.new(1, -40, 0, 30)
-title.Text = "HDragonsHub Key | Premium"
-title.TextColor3 = Color3.new(1,1,1)
+title.Size = UDim2.new(1,0,0,30)
+title.Position = UDim2.new(0,0,0,5)
 title.BackgroundTransparency = 1
+title.Text = "🔑 Key Verification"
 title.Font = Enum.Font.GothamBold
 title.TextSize = 22
-title.Position = UDim2.new(0, 40, 0, 8)
-title.TextXAlignment = Enum.TextXAlignment.Left
+title.TextColor3 = Color3.fromRGB(255,255,255)
 
-local desc = Instance.new("TextLabel", frame)
-desc.Size = UDim2.new(1, -40, 0, 30)
-desc.Text = "Verify your Premium Key and join Discord for a key."
-desc.TextColor3 = Color3.new(1,1,1)
-desc.BackgroundTransparency = 1
-desc.Font = Enum.Font.Gotham
-desc.TextWrapped = true
-desc.TextSize = 14
-desc.Position = UDim2.new(0, 20, 0, 45)
-
-local close = Instance.new("TextButton", frame)
-close.Size = UDim2.new(0, 30, 0, 30)
-close.Position = UDim2.new(1, -35, 0, 5)
-close.Text = "✕"
-close.TextColor3 = Color3.new(1,0,0)
-close.Font = Enum.Font.Gotham
-close.TextSize = 20
-close.BackgroundTransparency = 1
-
+-- TextBox
 local textbox = Instance.new("TextBox", frame)
-textbox.Size = UDim2.new(0.8, 0, 0, 35)
-textbox.Position = UDim2.new(0.1, 0, 0.45, 0)
+textbox.Size = UDim2.new(0.8,0,0,35)
+textbox.Position = UDim2.new(0.1,0,0.3,0)
 textbox.PlaceholderText = "Enter your key..."
-textbox.Text = ""
 textbox.TextColor3 = Color3.new(0,0,0)
-textbox.Font = Enum.Font.Gotham
-textbox.TextSize = 18
 textbox.BackgroundColor3 = Color3.fromRGB(255,255,255)
-Instance.new("UICorner", textbox).CornerRadius = UDim.new(0, 8)
+Instance.new("UICorner", textbox).CornerRadius = UDim.new(0,8)
 
+-- Check Button
 local checkBtn = Instance.new("TextButton", frame)
-checkBtn.Size = UDim2.new(0.4, -5, 0, 35)
-checkBtn.Position = UDim2.new(0.1, 0, 0.7, 0)
+checkBtn.Size = UDim2.new(0.4,0,0,35)
+checkBtn.Position = UDim2.new(0.1,0,0.65,0)
 checkBtn.Text = "Check Key"
 checkBtn.TextColor3 = Color3.fromRGB(255,255,255)
-checkBtn.Font = Enum.Font.GothamBold
-checkBtn.TextSize = 18
 checkBtn.BackgroundColor3 = Color3.fromRGB(0,0,0)
-Instance.new("UICorner", checkBtn).CornerRadius = UDim.new(0, 8)
+Instance.new("UICorner", checkBtn).CornerRadius = UDim.new(0,8)
 
+-- Discord Button
 local discordBtn = Instance.new("TextButton", frame)
-discordBtn.Size = UDim2.new(0.4, -5, 0, 35)
-discordBtn.Position = UDim2.new(0.5, 5, 0.7, 0)
-discordBtn.Text = "Join Discord"
+discordBtn.Size = UDim2.new(0.4,0,0,35)
+discordBtn.Position = UDim2.new(0.5,0,0.65,0)
+discordBtn.Text = "Show Discord"
 discordBtn.TextColor3 = Color3.fromRGB(255,255,255)
-discordBtn.Font = Enum.Font.GothamBold
-discordBtn.TextSize = 18
 discordBtn.BackgroundColor3 = Color3.fromRGB(88,101,242)
-Instance.new("UICorner", discordBtn).CornerRadius = UDim.new(0, 8)
+Instance.new("UICorner", discordBtn).CornerRadius = UDim.new(0,8)
 
+-- Result Label
 local result = Instance.new("TextLabel", frame)
-result.Size = UDim2.new(1, 0, 0, 20)
-result.Position = UDim2.new(0, 0, 1, -25)
+result.Size = UDim2.new(1,0,0,20)
+result.Position = UDim2.new(0,0,1,-25)
 result.BackgroundTransparency = 1
 result.Text = ""
 result.TextColor3 = Color3.new(1,0,0)
 result.Font = Enum.Font.Gotham
 result.TextSize = 16
 
-local function clearAll()
-	if screenGui then screenGui:Destroy() end
-end
-
-close.MouseButton1Click:Connect(clearAll)
-
-checkBtn.MouseButton1Click:Connect(function()
-	if textbox.Text == validKey then
-		if player.UserId == allowedUserId then
-			result.TextColor3 = Color3.new(0,1,0)
-			result.Text = "✅ Key valid!"
-			pcall(function()
-				writefile("MyKey.txt", validKey)
-			end)
-			wait(1)
-			clearAll()
-			task.wait(0.5)
-			loadstring(game:HttpGet("https://raw.githubusercontent.com/hdgsydgdgdy1233/dg962bdyd/refs/heads/main/Nexa%20Premium"))()
-		else
-			result.TextColor3 = Color3.new(1,0,0)
-			result.Text = "❌ Key not for this account."
-		end
-	else
-		result.TextColor3 = Color3.new(1,0,0)
-		result.Text = "❌ Wrong key."
-	end
-end)
-
-discordBtn.MouseButton1Click:Connect(function()
-	setclipboard("https://discord.gg/ECxQFc97F5")
-	result.TextColor3 = Color3.new(0,1,0)
-	result.Text = "📋 Discord link copied!"
-end)
-
-
-
-
--- LocalScript (LocalPlayer-only)
--- Key GUI + validasi + UserId check + load Wind UI dari URL
-
-local TweenService = game:GetService("TweenService")
-local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
-
-local player = Players.LocalPlayer
-if not player then return end
-
--- CONFIG
-local allowedUserId = 5464154339 -- ganti dengan UserId yang diizinkan
-local validKey = "Nexa-Premium_nfeufgefehuhf8sncsc"
-local issuedDate = "2025-07-26 18" -- format yyyy-mm-dd hh
-local expireAfter = 30 * 24 * 60 * 60 -- 30 hari
-local windUIUrl = "https://raw.githubusercontent.com/username/repo/branch/WindUI.lua" -- ganti dengan URL Wind UI kamu
-
--- Check UserId
-if player.UserId ~= allowedUserId then
-	warn("UserId tidak diizinkan. Key GUI tidak akan muncul.")
-	return
-end
-
--- Parse date helper
-local function parseDate(str)
-	local y, m, d, h = str:match("(%d+)%-(%d+)%-(%d+) (%d+)")
-	return os.time({year = tonumber(y), month = tonumber(m), day = tonumber(d), hour = tonumber(h)})
-end
-
-local issuedTimestamp = parseDate(issuedDate)
-local expiredTimestamp = issuedTimestamp + expireAfter
-
--- ---------- GUI ----------
-local playerGui = player:WaitForChild("PlayerGui")
-if playerGui:FindFirstChild("KeyGui") then
-	playerGui.KeyGui:Destroy()
-end
-
-local screenGui = Instance.new("ScreenGui", playerGui)
-screenGui.Name = "KeyGui"
-
-local frame = Instance.new("Frame", screenGui)
-frame.Size = UDim2.new(0, 350, 0, 0)
-frame.Position = UDim2.new(0.5, 0, 1, 0)
-frame.AnchorPoint = Vector2.new(0.5, 0.5)
-frame.BackgroundTransparency = 0.2
-frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 20)
-
-TweenService:Create(frame, TweenInfo.new(0.45, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-	Position = UDim2.new(0.5, 0, 0.5, 0),
-	Size = UDim2.new(0, 350, 0, 260)
-}):Play()
-
--- Icon + title + desc
-local icon = Instance.new("ImageLabel", frame)
-icon.Size = UDim2.new(0, 24, 0, 24)
-icon.Position = UDim2.new(0, 10, 0, 10)
-icon.BackgroundTransparency = 1
-icon.Image = "rbxassetid://105634643886181"
-
-local title = Instance.new("TextLabel", frame)
-title.Size = UDim2.new(1, -40, 0, 30)
-title.Text = "HDragonsHub Key | Premium"
-title.TextColor3 = Color3.new(1,1,1)
-title.BackgroundTransparency = 1
-title.Font = Enum.Font.GothamBold
-title.TextSize = 22
-title.Position = UDim2.new(0, 40, 0, 8)
-title.TextXAlignment = Enum.TextXAlignment.Left
-
-local desc = Instance.new("TextLabel", frame)
-desc.Size = UDim2.new(1, -40, 0, 42)
-desc.Text = "Verify your Premium Key. (Local UI testing only)"
-desc.TextColor3 = Color3.new(1,1,1)
-desc.BackgroundTransparency = 1
-desc.Font = Enum.Font.Gotham
-desc.TextWrapped = true
-desc.TextSize = 14
-desc.Position = UDim2.new(0, 20, 0, 45)
-
-local remainingLabel = Instance.new("TextLabel", frame)
-remainingLabel.Size = UDim2.new(1, -40, 0, 20)
-remainingLabel.Position = UDim2.new(0, 20, 0, 90)
-remainingLabel.BackgroundTransparency = 1
-remainingLabel.Font = Enum.Font.Gotham
-remainingLabel.TextSize = 14
-remainingLabel.TextColor3 = Color3.fromRGB(200,200,200)
-remainingLabel.Text = ""
-
-local close = Instance.new("TextButton", frame)
-close.Size = UDim2.new(0, 30, 0, 30)
-close.Position = UDim2.new(1, -35, 0, 5)
-close.Text = "✕"
-close.TextColor3 = Color3.new(1,0,0)
-close.Font = Enum.Font.Gotham
-close.TextSize = 20
-close.BackgroundTransparency = 1
-
-local textbox = Instance.new("TextBox", frame)
-textbox.Size = UDim2.new(0.8, 0, 0, 35)
-textbox.Position = UDim2.new(0.1, 0, 0.45, 0)
-textbox.PlaceholderText = "Enter your key..."
-textbox.Text = ""
-textbox.TextColor3 = Color3.new(0,0,0)
-textbox.Font = Enum.Font.Gotham
-textbox.TextSize = 18
-textbox.BackgroundColor3 = Color3.fromRGB(255,255,255)
-Instance.new("UICorner", textbox).CornerRadius = UDim.new(0, 8)
-
-local checkBtn = Instance.new("TextButton", frame)
-checkBtn.Size = UDim2.new(0.4, -5, 0, 35)
-checkBtn.Position = UDim2.new(0.1, 0, 0.7, 0)
-checkBtn.Text = "Check Key"
-checkBtn.TextColor3 = Color3.fromRGB(255,255,255)
-checkBtn.Font = Enum.Font.GothamBold
-checkBtn.TextSize = 18
-checkBtn.BackgroundColor3 = Color3.fromRGB(0,0,0)
-Instance.new("UICorner", checkBtn).CornerRadius = UDim.new(0, 8)
-
-local discordBtn = Instance.new("TextButton", frame)
-discordBtn.Size = UDim2.new(0.4, -5, 0, 35)
-discordBtn.Position = UDim2.new(0.5, 5, 0.7, 0)
-discordBtn.Text = "Show Discord Link"
-discordBtn.TextColor3 = Color3.fromRGB(255,255,255)
-discordBtn.Font = Enum.Font.GothamBold
-discordBtn.TextSize = 18
-discordBtn.BackgroundColor3 = Color3.fromRGB(88,101,242)
-Instance.new("UICorner", discordBtn).CornerRadius = UDim.new(0, 8)
-
-local result = Instance.new("TextLabel", frame)
-result.Size = UDim2.new(1, 0, 0, 20)
-result.Position = UDim2.new(0, 0, 1, -25)
-result.BackgroundTransparency = 1
-result.Text = ""
-result.TextColor3 = Color3.new(1,0,0)
-result.Font = Enum.Font.Gotham
-result.TextSize = 16
-
-frame.Active = true
-frame.Draggable = true
-
--- ---------- Functions ----------
-local function flashResult(color,text)
-	result.TextColor3 = color
-	result.Text = text
-end
-
+-- Functions
 local function formatRemaining(secs)
-	if secs <= 0 then
-		return "Expired"
-	end
+	if secs <= 0 then return "Expired" end
 	local days = math.floor(secs/86400)
 	local hours = math.floor((secs%86400)/3600)
 	local mins = math.floor((secs%3600)/60)
 	return string.format("%d hari %02d jam %02d menit", days,hours,mins)
 end
 
-local function updateRemainingLabel()
-	local now = os.time()
-	local rem = math.max(0, expiredTimestamp - now)
-	remainingLabel.Text = "Sisa waktu key: "..formatRemaining(rem)
-	if rem <= 0 then
-		remainingLabel.TextColor3 = Color3.fromRGB(255,100,100)
-	else
-		remainingLabel.TextColor3 = Color3.fromRGB(200,200,200)
-	end
-end
-
-task.spawn(function()
-	while frame and frame.Parent do
-		updateRemainingLabel()
-		task.wait(10)
-	end
-end)
-
--- ---------- Events ----------
-close.MouseButton1Click:Connect(function()
-	if screenGui and screenGui.Parent then screenGui:Destroy() end
-end)
-
 checkBtn.MouseButton1Click:Connect(function()
 	local input = tostring(textbox.Text):match("^%s*(.-)%s*$") or ""
 	if input == "" then
-		flashResult(Color3.fromRGB(255,100,100), "❌ Masukkan key terlebih dahulu.")
+		result.TextColor3 = Color3.fromRGB(255,100,100)
+		result.Text = "❌ Masukkan key terlebih dahulu."
 		return
 	end
-	if input == validKey then
-		flashResult(Color3.fromRGB(0,1,0), "✅ Key valid! Loading WindUI...")
-		task.delay(0.1,function()
-			pcall(function()
-				loadstring(game:HttpGet(windUIUrl))()
-			end)
+	
+	if input == userData.key then
+		local remainingTime = expiredTimestamp - os.time()
+		if remainingTime <= 0 then
+			result.TextColor3 = Color3.fromRGB(255,0,0)
+			result.Text = "❌ Key expired. Tidak bisa load script."
+			return
+		end
+
+		result.TextColor3 = Color3.fromRGB(0,255,0)
+		result.Text = "✅ Key valid! Loading script..."
+		if screenGui then screenGui:Destroy() end -- GUI key hilang
+
+		-- Load Nexa Premium
+		pcall(function()
+			loadstring(game:HttpGet("https://raw.githubusercontent.com/hdgsydgdgdy1233/dg962bdyd/refs/heads/main/Nexa%20Premium"))()
 		end)
-		TweenService:Create(frame, TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.In),{
-			Size=UDim2.new(0,350,0,0),
-			Position=UDim2.new(0.5,0,1,0)
-		}):Play()
-		task.delay(0.4,function()
-			if screenGui and screenGui.Parent then screenGui:Destroy() end
+
+		-- GUI Time Live di bawah logo Roblox
+		local liveGui = Instance.new("ScreenGui", playerGui)
+		liveGui.Name = "TimeLiveGui"
+
+		local logo = Instance.new("ImageLabel", liveGui)
+		logo.Size = UDim2.new(0, 50, 0, 50)
+		logo.Position = UDim2.new(0, 20, 0, 20)
+		logo.BackgroundTransparency = 1
+		logo.Image = "rbxassetid://6014261997"
+
+		local timeLabel = Instance.new("TextLabel", liveGui)
+		timeLabel.Size = UDim2.new(0, 200, 0, 30)
+		timeLabel.Position = UDim2.new(0, 20, 0, 75)
+		timeLabel.BackgroundTransparency = 1
+		timeLabel.Font = Enum.Font.GothamBold
+		timeLabel.TextSize = 5
+		timeLabel.TextColor3 = Color3.fromRGB(255,255,255)
+
+		-- Update setiap 10 detik
+		task.spawn(function()
+			while liveGui and liveGui.Parent do
+				local rem = math.max(0, expiredTimestamp - os.time())
+				timeLabel.Text = "Key Expired"..formatRemaining(rem)
+				task.wait(10)
+			end
 		end)
+
 	else
-		flashResult(Color3.fromRGB(1,0,0), "❌ Wrong key.")
+		result.TextColor3 = Color3.fromRGB(255,0,0)
+		result.Text = "❌ Wrong key."
 	end
 end)
 
