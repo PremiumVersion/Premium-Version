@@ -5,14 +5,6 @@ local player = Players.LocalPlayer
 -- CONFIG: UserId -> {key, issuedDate}
 local validUsers = {
 	[] = {key = "", issuedDate = "2025-10-12 18"}, -- no
-	[] = {key = "", issuedDate = "2025-10-01 12"}, -- no
-	[] = {key = "", issuedDate = "2025-08-10 09"}, -- no
-	[] = {key = "", issuedDate = "2025-10-12 18"}, -- no
-	[] = {key = "", issuedDate = "2025-10-01 12"}, -- no
-	[] = {key = "", issuedDate = "2025-08-10 09"}, -- no
-	[] = {key = "", issuedDate = "2025-10-12 18"}, -- no
-	[] = {key = "", issuedDate = "2025-10-01 12"}, -- no
-	[] = {key = "", issuedDate = "2025-08-10 09"}, -- no
 }
 
 local expireAfter = 30 * 24 * 60 * 60 -- 30 hari
