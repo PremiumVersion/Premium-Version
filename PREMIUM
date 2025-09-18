@@ -121,7 +121,7 @@ checkBtn.MouseButton1Click:Connect(function()
 
 		-- Load Nexa Premium
 		pcall(function()
-			loadstring(game:HttpGet("https://raw.githubusercontent.com/squdgwdujwodhwu/cdjvdkjfekhfeufdjwfbehu/refs/heads/main/Fish%20IT!%20%7C%20Premium"))()
+			loadstring(game:HttpGet("https://raw.githubusercontent.com/squdgwdujwodhwu/cdjvdkjfekhfeufdjwfbehu/refs/heads/main/Nexa%20%7C%20Premium"))()
 		end)
 
 		-- GUI Time Live di bawah logo Roblox
