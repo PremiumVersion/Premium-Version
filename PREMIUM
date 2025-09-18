@@ -4,7 +4,8 @@ local player = Players.LocalPlayer
 
 -- CONFIG: UserId -> {key, issuedDate}
 local validUsers = {
-	[] = {key = "", issuedDate = "2025-10-12 18"}, -- no
+	[9464607503] = {key = "NexaPremium_dngffvefgefug", issuedDate = "2025-10-18 21"}, -- yes
+	[5464154339] = {key = "NexaPremium_dhueheuwuwduu", issuedDate = "2025-10-18 21"}, -- no
 }
 
 local expireAfter = 30 * 24 * 60 * 60 -- 30 hari
