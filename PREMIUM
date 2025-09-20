@@ -6,6 +6,7 @@ local player = Players.LocalPlayer
 local validUsers = {
 	[9464607503] = {key = "NexaPremium_dngffvefgefug", issuedDate = "2025-10-18 21"}, -- yes
 	[5464154339] = {key = "NexaPremium_dhueheuwuwduu", issuedDate = "2025-10-18 21"}, -- no
+	[1444873051] = {key = "NexaPremium_6DB404IG", issuedDate = "2025-10-20 21"}, -- yes
 }
 
 local expireAfter = 30 * 24 * 60 * 60 -- 30 hari
