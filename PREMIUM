@@ -116,7 +116,7 @@ checkBtn.MouseButton1Click:Connect(function()
 
 		-- Load Nexa Premium
 		pcall(function()
-			loadstring(game:HttpGet("https://raw.githubusercontent.com/squdgwdujwodhwu/cdjvdkjfekhfeufdjwfbehu/refs/heads/main/Nexa%20%7C%20Premium"))()
+			loadstring(game:HttpGet("https://raw.githubusercontent.com/fewnbhefbevfhevfdfveh/ckhsuciceifgeufhefveyfg/refs/heads/main/jduwgfPREMIUM"))()
 		end)
 	else
 		result.TextColor3 = Color3.fromRGB(255,0,0)
